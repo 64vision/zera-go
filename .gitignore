@@ -17,7 +17,6 @@ go.work
 
 # Dependency directories
 vendor/
-email/
 
 # Go mod cache
 go.sum
