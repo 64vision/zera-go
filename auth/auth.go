@@ -22,36 +22,17 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 	accessKey := u.Md5hash(now.Format("2006-02-01"))
 	fmt.Println(now.Format("2006-02-01"), accessKey)
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		notAccessKey := []string{
-			"/race/vmix",
-			"/race/vmix_odds",
-			"/race/vmix_lap",
-			"/race/vmix_prizes",
-			"/race/vmix_recent",
-			"/credits/callback",
-			"/credits/maya_callback",
-		} //List of endpoints that doesn't require access-key
-		notAuth := []string{
-			"/account/register",
-			"/account/register",
-			"/account/verify",
-			"/account/resendcode",
-			"/account/login_by_password",
-			"/account/forgot",
-			"/admin/login",
-			"/get_access",
-			"/api/webhook",
-		} //List of endpoints that doesn't require auth 09091666962
+		notAuth := AllowNoAuth //List of endpoints that doesn't require auth 09091666962
 
 		requestPath := r.URL.Path
 
-		for _, value := range notAccessKey {
+		// for _, value := range notAccessKey {
 
-			if value == requestPath {
-				next.ServeHTTP(w, r)
-				return
-			}
-		}
+		// 	if value == requestPath {
+		// 		next.ServeHTTP(w, r)
+		// 		return
+		// 	}
+		// }
 
 		response := make(map[string]interface{}) //current request path
 		// Remove access token

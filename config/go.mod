@@ -1,4 +1,4 @@
-module zerago/dbconfig
+module zerago/config
 
 go 1.26.4
 

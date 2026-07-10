@@ -1,7 +1,7 @@
 package users
 
 import (
-	"zerago/dbconfig"
+	"zerago/config"
 
 	"github.com/go-pg/pg"
 )
@@ -9,6 +9,5 @@ import (
 var DBM *pg.DB
 
 func init() {
-
-	DBM = dbconfig.DBM
+	DBM = config.DBM
 }

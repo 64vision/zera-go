@@ -1,0 +1,28 @@
+{
+     "dbconfig": {
+        "addr":     "database_host:port",
+        "database": "",
+        "user":     "",
+        "password": "yourpass"
+    },
+    "emailconfig": { 
+        "sender_email": "no-reply@email.com",
+        "sender_name": "suite",
+        "ses_id":     "**********",
+        "ses_secret": "*******************",
+        "charset": "UTF-8"
+    },
+     "path_permission": {
+        "no_auth":[
+           "/account/register",
+			"/account/register",
+			"/account/verify",
+			"/account/resendcode",
+			"/account/login_by_password",
+			"/account/forgot",
+			"/admin/login",
+			"/get_access",
+			"/api/webhook"
+        ]
+    }
+}

@@ -1,4 +1,4 @@
-package dbconfig
+package config
 
 import (
 	"encoding/json"
@@ -47,7 +47,7 @@ var CONFIG *Configuration
 
 var PRODCONFIGPATH = "/home/ubuntu/zera/config.json" //ubuntu service path
 
-var CONFIGPATH = "../config.json"
+var CONFIGPATH = "../config.json" //relative path
 
 func init() {
 	fmt.Println("----------------------\n Prod:  Initializing...")

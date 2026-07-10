@@ -1,7 +1,7 @@
 package email
 
 import (
-	"zerago/dbconfig"
+	"zerago/config"
 
 	"github.com/go-pg/pg"
 )
@@ -20,10 +20,10 @@ var (
 )
 
 func init() {
-	SenderEmail = dbconfig.CONFIG.Emailconfig.SenderEmail
-	SenderName = dbconfig.CONFIG.Emailconfig.SenderName
-	SesID = dbconfig.CONFIG.Emailconfig.SesID
-	SesSecret = dbconfig.CONFIG.Emailconfig.SesSecret
-	CharSet = dbconfig.CONFIG.Emailconfig.CharSet
-	DBM = dbconfig.DBM
+	SenderEmail = config.CONFIG.Emailconfig.SenderEmail
+	SenderName = config.CONFIG.Emailconfig.SenderName
+	SesID = config.CONFIG.Emailconfig.SesID
+	SesSecret = config.CONFIG.Emailconfig.SesSecret
+	CharSet = config.CONFIG.Emailconfig.CharSet
+	DBM = config.DBM
 }

@@ -5,7 +5,7 @@ go 1.26.4
 require (
 	github.com/aws/aws-sdk-go v1.55.8
 	github.com/go-pg/pg v8.0.7+incompatible
-	zerago/dbconfig v0.0.0-00010101000000-000000000000
+	zerago/config v0.0.0-00010101000000-000000000000
 )
 
 require (
@@ -22,4 +22,4 @@ require (
 	mellium.im/sasl v0.3.2 // indirect
 )
 
-replace zerago/dbconfig => ../dbconfig
+replace zerago/config => ../config
