@@ -93,6 +93,7 @@ type Administrator struct {
 	MobileNo  string    `json:"mobile_no"`
 	Email     string    `json:"email"`
 	Company   string    `json:"company"`
+	LastLogin time.Time `json:"last_login"`
 }
 
 func (login *LogRequest) Login() map[string]interface{} {

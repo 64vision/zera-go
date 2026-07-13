@@ -42,7 +42,7 @@ type PathPermission struct {
 }
 
 var DBM *pg.DB
-var PRODUCTION = true
+var PRODUCTION = false
 var CONFIG *Configuration
 
 var PRODCONFIGPATH = "/home/ubuntu/zera/config.json" //ubuntu service path
@@ -81,7 +81,7 @@ func CheckAndLoadConfigs() *Configuration {
 func OpenDB() {
 	CONFIG = CheckAndLoadConfigs()
 	os.Setenv("TZ", "Asia/Manila")
-	fmt.Println("----------------------\n Prod:  Initializing  database...")
+	fmt.Println("----------------------\n Prod:  Initializing  database...", CONFIG.Dbconfig.Database)
 	os.Setenv("TZ", "Asia/Manila")
 	DBM = pg.Connect(&pg.Options{
 		Addr:     CONFIG.Dbconfig.Addr,
