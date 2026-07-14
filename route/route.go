@@ -12,7 +12,6 @@ import (
 
 	"zerago/auth"
 	"zerago/data"
-	"zerago/users"
 )
 
 const (
@@ -25,7 +24,7 @@ func main() {
 	// Routes consist of a path and a handler function.
 	// router.HandleFunc("/account/register", users.Register).Methods("POST")
 	// router.HandleFunc("/account/verify", users.Verify).Methods("POST")
-	router.HandleFunc("/app/login", users.AdminLogin).Methods("POST")
+	router.HandleFunc("/app/user/login", UserLogin).Methods("POST")
 	router.HandleFunc("/app/query", data.QueryData).Methods("POST")
 	router.HandleFunc("/app/new_data", data.InsertData).Methods("POST")
 	// router.HandleFunc("/account/get", account.GetAccount).Methods("POST")

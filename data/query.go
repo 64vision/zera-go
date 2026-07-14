@@ -40,7 +40,7 @@ func (qry *Query) ExecInsert() map[string]interface{} {
 	fmt.Println("ExecInsert", qry.Query)
 	res, errdb := DBM.Exec(qry.Query)
 	if errdb != nil {
-		//panic(errdb)
+		panic(errdb)
 		return u.Message(false, errdb.Error())
 	}
 	fmt.Println(res.Model())

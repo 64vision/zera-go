@@ -2,6 +2,7 @@ package data
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strings"
 	u "zerago/utils"
@@ -9,11 +10,12 @@ import (
 
 func QueryData(w http.ResponseWriter, r *http.Request) {
 	(w).Header().Set("Access-Control-Allow-Origin", "*")
+	fmt.Println("QueryData")
 	qry := &Query{}
 	var resp map[string]interface{}
 	err := json.NewDecoder(r.Body).Decode(qry) //decode the request body into struct and failed if any error occur
 	if err != nil {
-		//panic(err)
+		panic(err)
 		u.Respond(w, u.Message(false, "Invalid request"))
 		return
 	}
