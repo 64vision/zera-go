@@ -43,7 +43,7 @@ func (qry *Query) ExecInsert() map[string]interface{} {
 		panic(errdb)
 		return u.Message(false, errdb.Error())
 	}
-	fmt.Println(res.Model())
+
 	if res.RowsAffected() == 0 {
 		return u.Message(false, "No rows affected!")
 	}
