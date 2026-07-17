@@ -2,7 +2,9 @@ package data
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
+	u "zerago/utils"
 )
 
 type Product struct {
@@ -32,4 +34,34 @@ type ProductItem struct {
 	AddedBy      int             `json:"added_by" pg:"added_by"`
 	Unit         string          `json:"unit" pg:"unit"`
 	Properties   json.RawMessage `json:"properties" pg:"properties"`
+}
+
+func (product *Product) Insert() map[string]interface{} {
+	fmt.Println("InsertSales")
+	product.AddedDT = time.Now()
+	errdb := DBM.Insert(product)
+	if errdb != nil {
+		panic(errdb)
+		return u.Message(false, errdb.Error())
+	}
+
+	response := u.Message(true, "New product added!")
+	response["product"] = product
+	return response
+
+}
+
+func (product *Product) Update() map[string]interface{} {
+	fmt.Println("UpdateSales")
+	product.ModifiedOn = time.Now()
+	errdb := DBM.Update(product)
+	if errdb != nil {
+		panic(errdb)
+		return u.Message(false, errdb.Error())
+	}
+
+	response := u.Message(true, "product changes has been saved!")
+	response["product"] = product
+	return response
+
 }

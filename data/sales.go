@@ -28,10 +28,12 @@ type Sale struct {
 	CreatedAt        time.Time       `json:"created_at" pg:"created_at"`
 	UpdatedAt        time.Time       `json:"updated_at" pg:"updated_at"`
 	Status           string          `json:"status" pg:"status"`
-	Remarks          string          `json:"remarks" pg:"Remarks"`
+	Remarks          string          `json:"remarks" pg:"remarks"`
 	ProductItems     json.RawMessage `json:"product_items" pg:"product_items"`
 	ServicePerson    json.RawMessage `json:"service_person" pg:"service_person"`
 	ServiceLogs      json.RawMessage `json:"service_logs" pg:"service_logs"`
+	DiscountRequest  string          `json:"discount_request" pg:"discount_request"`
+	PaymentStatus    string          `json:"payment_status" pg:"payment_status"`
 }
 
 func (sale *Sale) Insert() map[string]interface{} {
@@ -44,6 +46,21 @@ func (sale *Sale) Insert() map[string]interface{} {
 	}
 
 	response := u.Message(true, "Saved!")
+	response["sale"] = sale
+	return response
+
+}
+
+func (sale *Sale) Update() map[string]interface{} {
+	fmt.Println("UpdateSales")
+	sale.UpdatedAt = time.Now()
+	errdb := DBM.Update(sale)
+	if errdb != nil {
+		panic(errdb)
+		return u.Message(false, errdb.Error())
+	}
+
+	response := u.Message(true, "Sales changes has been saved!")
 	response["sale"] = sale
 	return response
 

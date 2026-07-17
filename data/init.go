@@ -8,7 +8,7 @@ import (
 
 var DBM *pg.DB
 
-var Prohibiteds = []string{"balance", "delete", "level", "truncate", "commission", "agent", "created_at", "password"}
+var Prohibiteds = []string{"balance", "delete", "level", "truncate", "commission", "agent", "password"}
 
 func init() {
 	DBM = config.DBM
