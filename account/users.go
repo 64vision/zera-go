@@ -1,6 +1,7 @@
 package account
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 	u "zerago/utils"
@@ -13,25 +14,27 @@ type Token struct {
 	jwt.StandardClaims
 }
 type User struct {
-	ID                int       `json:"id"`
-	Username          string    `json:"username"`
-	Password          string    `json:"password"`
-	Email             string    `json:"email"`
-	Role              string    `json:"role"`
-	Token             string    `json:"token"`
-	Wallet            float64   `json:"wallet"`
-	DeviceToken       string    `json:"device_token"`
-	LastUpdate        time.Time `json:"last_update"`
-	Created           time.Time `json:"created"`
-	LastLogin         time.Time `json:"last_login"`
-	Fullname          string    `json:"fullname"`
-	Title             string    `json:"title"`
-	PagePermissions   []string  `sql:",array" json:"page_permissions"`
-	ActionPermissions []string  `sql:",array" json:"action_permissions"`
-	ContactNo         string    `json:"contact_no"`
-	Status            string    `json:"status"`
-	Branch            int       `json:"branch"`
-	FranchiseeID      int       `json:"franchisee_id"`
+	ID                int             `json:"id"`
+	Username          string          `json:"username"`
+	Password          string          `json:"password"`
+	Email             string          `json:"email"`
+	Role              string          `json:"role"`
+	Token             string          `json:"token"`
+	Wallet            float64         `json:"wallet"`
+	DeviceToken       string          `json:"device_token"`
+	LastUpdate        time.Time       `json:"last_update"`
+	Created           time.Time       `json:"created"`
+	LastLogin         time.Time       `json:"last_login"`
+	Fullname          string          `json:"fullname"`
+	Title             string          `json:"title"`
+	PagePermissions   json.RawMessage `json:"page_permissions"`
+	ActionPermissions json.RawMessage `json:"action_permissions"`
+	ContactNo         string          `json:"contact_no"`
+	Status            string          `json:"status"`
+	Type              string          `json:"type"`
+	Branch            int             `json:"branch"`
+	FranchiseeID      int             `json:"franchisee_id"`
+	Profile           json.RawMessage `json:"profile"`
 }
 type UserListRes struct {
 	ID           int       `json:"id"`
@@ -245,7 +248,10 @@ func (user *User) Login() map[string]interface{} {
 		return u.Message(false, "Connection error. Please retry")
 	}
 	if account.ID == 0 {
-		return u.Message(false, "Email not found")
+		return u.Message(false, "User not found")
+	}
+	if account.Status == "Deactivated" {
+		return u.Message(false, "Your account has beed deactivated!")
 	}
 	fmt.Println("Login: ", user.Username, user.Password)
 	if !u.ComparePasswords(account.Password, []byte(user.Password)) {

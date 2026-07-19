@@ -8,6 +8,59 @@ import (
 	u "zerago/utils"
 )
 
+func UpdatePassword(w http.ResponseWriter, r *http.Request) {
+	(w).Header().Set("Access-Control-Allow-Origin", "*")
+	item := &account.User{}
+	err := json.NewDecoder(r.Body).Decode(item) //decode the request body into struct and failed if any error occur
+	if err != nil {
+		panic(err.Error())
+		u.Respond(w, u.Message(false, "Invalid request"))
+		return
+	}
+	resp := item.ChangePassword()
+	u.Respond(w, resp)
+}
+
+func NewUser(w http.ResponseWriter, r *http.Request) {
+	(w).Header().Set("Access-Control-Allow-Origin", "*")
+	item := &account.User{}
+	err := json.NewDecoder(r.Body).Decode(item) //decode the request body into struct and failed if any error occur
+	if err != nil {
+		panic(err)
+		u.Respond(w, u.Message(false, "Invalid request"))
+		return
+	}
+
+	resp := item.Create()
+	u.Respond(w, resp)
+}
+
+func UpdateUser(w http.ResponseWriter, r *http.Request) {
+	(w).Header().Set("Access-Control-Allow-Origin", "*")
+	item := &account.User{}
+	err := json.NewDecoder(r.Body).Decode(item) //decode the request body into struct and failed if any error occur
+	if err != nil {
+		panic(err)
+		u.Respond(w, u.Message(false, "Invalid request"))
+		return
+	}
+	resp := item.Update()
+	u.Respond(w, resp)
+}
+
+func SalesView(w http.ResponseWriter, r *http.Request) {
+	(w).Header().Set("Access-Control-Allow-Origin", "*")
+	item := &data.Sale{}
+	err := json.NewDecoder(r.Body).Decode(item) //decode the request body into struct and failed if any error occur
+	if err != nil {
+		panic(err)
+		u.Respond(w, u.Message(false, "Invalid request"))
+		return
+	}
+	resp := item.View()
+	u.Respond(w, resp)
+}
+
 func NewCustomer(w http.ResponseWriter, r *http.Request) {
 	(w).Header().Set("Access-Control-Allow-Origin", "*")
 	item := &data.Customer{}
@@ -17,6 +70,7 @@ func NewCustomer(w http.ResponseWriter, r *http.Request) {
 		u.Respond(w, u.Message(false, "Invalid request"))
 		return
 	}
+	item.CreatedBy = r.Context().Value("user").(int)
 	resp := item.New()
 	u.Respond(w, resp)
 }
@@ -43,6 +97,7 @@ func NewPurchase(w http.ResponseWriter, r *http.Request) {
 		u.Respond(w, u.Message(false, "Invalid request"))
 		return
 	}
+	item.CreatedBy = r.Context().Value("user").(int)
 	resp := item.New()
 	u.Respond(w, resp)
 }
@@ -69,6 +124,7 @@ func UpdateVendor(w http.ResponseWriter, r *http.Request) {
 		u.Respond(w, u.Message(false, "Invalid request"))
 		return
 	}
+
 	resp := item.Update()
 	u.Respond(w, resp)
 }
@@ -82,6 +138,7 @@ func NewVendor(w http.ResponseWriter, r *http.Request) {
 		u.Respond(w, u.Message(false, "Invalid request"))
 		return
 	}
+	item.AddedBy = r.Context().Value("user").(int)
 	resp := item.Insert()
 	u.Respond(w, resp)
 }
@@ -108,6 +165,7 @@ func NewProduct(w http.ResponseWriter, r *http.Request) {
 		u.Respond(w, u.Message(false, "Invalid request"))
 		return
 	}
+	product.AddedBy = r.Context().Value("user").(int)
 	resp := product.Insert()
 	u.Respond(w, resp)
 }
@@ -134,6 +192,7 @@ func AddSales(w http.ResponseWriter, r *http.Request) {
 		u.Respond(w, u.Message(false, "Invalid request"))
 		return
 	}
+	sales.SalesPerson = r.Context().Value("user").(int)
 	resp := sales.Insert()
 	u.Respond(w, resp)
 }

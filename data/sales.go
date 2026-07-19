@@ -34,6 +34,21 @@ type Sale struct {
 	ServiceLogs      json.RawMessage `json:"service_logs" pg:"service_logs"`
 	DiscountRequest  string          `json:"discount_request" pg:"discount_request"`
 	PaymentStatus    string          `json:"payment_status" pg:"payment_status"`
+	Files            json.RawMessage `json:"files" pg:"files"`
+}
+
+func (sale *Sale) View() map[string]interface{} {
+	fmt.Println("Sales View")
+	var item Sale
+	_, errdb := DBM.QueryOne(&item, "select * from sales where id=?", sale.ID)
+	if errdb != nil {
+		panic(errdb)
+		return u.Message(false, errdb.Error())
+	}
+	response := u.Message(true, "Ok!")
+	response["sale"] = item
+	return response
+
 }
 
 func (sale *Sale) Insert() map[string]interface{} {

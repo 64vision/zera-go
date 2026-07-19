@@ -21,10 +21,12 @@ const (
 func main() {
 
 	router := mux.NewRouter()
-	// Routes consist of a path and a handler function.
-	// router.HandleFunc("/account/register", users.Register).Methods("POST")
-	// router.HandleFunc("/account/verify", users.Verify).Methods("POST")
+
 	router.HandleFunc("/app/user/login", UserLogin).Methods("POST")
+	router.HandleFunc("/app/new_user", NewUser).Methods("POST")
+	router.HandleFunc("/app/update_user", UpdateUser).Methods("POST")
+	router.HandleFunc("/app/update_password", UpdatePassword).Methods("POST")
+
 	router.HandleFunc("/app/query", data.QueryData).Methods("POST")
 	router.HandleFunc("/app/new_data", data.InsertData).Methods("POST")
 	router.HandleFunc("/app/add_sales", AddSales).Methods("POST")
@@ -37,19 +39,13 @@ func main() {
 	router.HandleFunc("/app/update_purchase", UpdatePurchase).Methods("POST")
 	router.HandleFunc("/app/new_customer", NewCustomer).Methods("POST")
 	router.HandleFunc("/app/update_customer", UpdateCustomer).Methods("POST")
+	router.HandleFunc("/app/view_sales", SalesView).Methods("POST")
 
-	// router.HandleFunc("/account/get", account.GetAccount).Methods("POST")
-	// router.HandleFunc("/account/resendcode", account.ResendCode).Methods("POST")
-	// router.HandleFunc("/account/forgot", account.ForgotPassword).Methods("POST")
-	// router.HandleFunc("/account/balance", account.BalanceInquire).Methods("POST")
-	// router.HandleFunc("/account/qry", account.CustomQry).Methods("POST")
-	// router.HandleFunc("/account/gateways", account.GetGatewayEnabled).Methods("GET")
-	// router.HandleFunc("/credits/buy", account.DoBuyCredits).Methods("POST")
-	// router.HandleFunc("/credits/cashout", account.DoCashout).Methods("POST")
-	// router.HandleFunc("/credits/cashout_cancel", account.UpdateCashout).Methods("POST")
-	// router.HandleFunc("/credits/get_cashout", account.GetCashout).Methods("POST")
-	// router.HandleFunc("/credits/callback", account.Callback).Methods("POST")
-	// router.HandleFunc("/credits/maya_callback", account.MayaCallback).Methods("POST")
+	//expenses
+	router.HandleFunc("/app/new_expense", NewExpense).Methods("POST")
+	router.HandleFunc("/app/update_expense", UpdateExpense).Methods("POST")
+	router.HandleFunc("/app/new_expenses_account", NewExpenseAccount).Methods("POST")
+	router.HandleFunc("/app/update_expenses_account", UpdateExpenseAccount).Methods("POST")
 
 	router.Use(auth.JwtAuthentication)
 
