@@ -20,6 +20,7 @@ type Product struct {
 	Properties  json.RawMessage `json:"properties" pg:"properties"`
 	Tags        json.RawMessage `json:"tags" pg:"tags"`
 	Images      json.RawMessage `json:"images" pg:"images"`
+	Track       string          `json:"track" pg:"track"`
 }
 type ProductItem struct {
 	ID           int             `json:"id" pg:"id"`

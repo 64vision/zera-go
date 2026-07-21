@@ -13,7 +13,7 @@ import (
 )
 
 type Token struct {
-	AccountID int
+	UserId int
 	jwt.StandardClaims
 }
 
@@ -93,11 +93,11 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 			return
 		} else {
 			fmt.Println("Parsed Token:", token)
-			fmt.Println("Parsed accountID", token.AccountID)
+			fmt.Println("Parsed accountID", token.UserId)
 		}
 
 		//fmt.Printf("%v|USER:%d|ADDRESS:%s|URI:%s\n", time.Now(), tk.UserId, r.RemoteAddr, r.URL.Path)
-		ctx := context.WithValue(r.Context(), "user", token.AccountID)
+		ctx := context.WithValue(r.Context(), "user", token.UserId)
 		r = r.WithContext(ctx)
 		next.ServeHTTP(w, r) //proceed in the middleware chain!
 	})

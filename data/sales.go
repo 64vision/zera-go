@@ -3,6 +3,7 @@ package data
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"time"
 	u "zerago/utils"
 )
@@ -35,6 +36,41 @@ type Sale struct {
 	DiscountRequest  string          `json:"discount_request" pg:"discount_request"`
 	PaymentStatus    string          `json:"payment_status" pg:"payment_status"`
 	Files            json.RawMessage `json:"files" pg:"files"`
+	PaymentMethod    string          `json:"payment_method" pg:"payment_method"`
+	PaymentRef       string          `json:"payment_ref" pg:"payment_ref"`
+	DiscountItems    json.RawMessage `json:"discount_items" pg:"discount_items"`
+}
+
+type SalesItem struct {
+	ID           int64   `json:"id" pg:"id"`
+	ProductID    int     `json:"product_id" pg:"product_id"`
+	ItemID       int     `json:"item_id" pg:"item_id"`
+	Quantity     int     `json:"quantity" pg:"quantity"`
+	SalesID      int     `json:"sales_id" pg:"sales_id"`
+	SellingPrice float64 `json:"selling_price" pg:"selling_price"`
+}
+type ItemData struct {
+	ID           int             `json:"id"`
+	Code         string          `json:"code"`
+	ProductID    int             `json:"product_id"`
+	Name         string          `json:"name"`
+	Description  string          `json:"description"`
+	Cost         float64         `json:"cost"`
+	SellingPrice float64         `json:"selling_price"`
+	Amount       float64         `json:"amount"`
+	Stock        int             `json:"stock"`
+	Sold         *int            `json:"sold"` // nullable
+	Quantity     int             `json:"quantity"`
+	Unit         string          `json:"unit"`
+	Status       string          `json:"status"`
+	Checked      bool            `json:"checked"`
+	AddedBy      int             `json:"added_by"`
+	AddedDT      time.Time       `json:"added_dt"`
+	ModifiedOn   time.Time       `json:"modified_on"`
+	Tags         []string        `json:"tags"`
+	Images       []string        `json:"images"`
+	Properties   json.RawMessage `json:"properties"`
+	Track        string          `json:"track"`
 }
 
 func (sale *Sale) View() map[string]interface{} {
@@ -68,15 +104,54 @@ func (sale *Sale) Insert() map[string]interface{} {
 
 func (sale *Sale) Update() map[string]interface{} {
 	fmt.Println("UpdateSales")
+
 	sale.UpdatedAt = time.Now()
 	errdb := DBM.Update(sale)
 	if errdb != nil {
 		panic(errdb)
 		return u.Message(false, errdb.Error())
 	}
-
+	if sale.Status == "Completed" {
+		sale.TrackItems()
+	}
 	response := u.Message(true, "Sales changes has been saved!")
 	response["sale"] = sale
 	return response
 
+}
+func (sale *Sale) TrackItems() {
+	var items []ItemData
+	var errdb error
+	err := json.Unmarshal(sale.ProductItems, &items)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, item := range items {
+		var sales_item SalesItem
+
+		sales_item.ItemID = item.ID
+		sales_item.ProductID = item.ProductID
+		sales_item.Quantity = item.Quantity
+		sales_item.SalesID = sale.ID
+		sales_item.SellingPrice = item.SellingPrice
+		errdb = DBM.Insert(&sales_item)
+		if errdb != nil {
+			panic(errdb)
+		}
+
+		if item.Track == "Track Inventory" {
+			_, errdb = DBM.Exec("update product_items set stock=stock-?, sold=sold+? where id=?", item.Quantity, item.Quantity, item.ID)
+			if errdb != nil {
+				panic(errdb)
+			}
+
+		} else {
+			_, errdb = DBM.Exec("update product_items set sold=sold+? where id=?", item.Quantity, item.ID)
+			if errdb != nil {
+				panic(errdb)
+			}
+
+		}
+		fmt.Println(item.Track, item.Track)
+	}
 }
