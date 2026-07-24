@@ -15,6 +15,31 @@ type Item struct {
 	Data json.RawMessage `json:"data"`
 }
 
+type Variable struct {
+	ID       int    `json:"id"`
+	Name     string `json:"name"`
+	DataType string `json:"date_type"`
+	Value    string `json:"value"`
+}
+
+func QueryVars() map[string]interface{} {
+	fmt.Println("Sales View")
+	var results Item
+	qry := "select * from variables"
+	_, errdb := DBM.Query(&results, `SELECT json_agg(t) as data
+							FROM (
+								`+qry+`
+							) t;`)
+	if errdb != nil {
+		panic(errdb)
+		return u.Message(false, errdb.Error())
+	}
+	response := u.Message(true, "Ok!")
+	response["results"] = results.Data
+	return response
+
+}
+
 func (qry *Query) ExecQuery() map[string]interface{} {
 	fmt.Println("ExecQuery", qry.Query)
 	response := u.Message(true, "Result")

@@ -45,7 +45,7 @@ var DBM *pg.DB
 var PRODUCTION = false
 var CONFIG *Configuration
 
-var PRODCONFIGPATH = "/home/ubuntu/zera/config.json" //ubuntu service path
+var PRODCONFIGPATH = "/home/ubuntu/zera/config-demo.json" //ubuntu service path
 
 var CONFIGPATH = "../config.json" //relative path
 

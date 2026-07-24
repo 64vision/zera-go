@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	PORT = "8100"
+	PORT = "8100" // "7700"
 )
 
 func main() {
@@ -41,11 +41,16 @@ func main() {
 	router.HandleFunc("/app/update_customer", UpdateCustomer).Methods("POST")
 	router.HandleFunc("/app/view_sales", SalesView).Methods("POST")
 
+	router.HandleFunc("/app/get_vars", GetVars).Methods("GET")
+
 	//expenses
 	router.HandleFunc("/app/new_expense", NewExpense).Methods("POST")
 	router.HandleFunc("/app/update_expense", UpdateExpense).Methods("POST")
 	router.HandleFunc("/app/new_expenses_account", NewExpenseAccount).Methods("POST")
 	router.HandleFunc("/app/update_expenses_account", UpdateExpenseAccount).Methods("POST")
+
+	router.HandleFunc("/app/new_service_bay", NewServiceBay).Methods("POST")
+	router.HandleFunc("/app/update_service_bay", UpdateServiceBay).Methods("POST")
 
 	router.Use(auth.JwtAuthentication)
 

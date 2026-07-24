@@ -8,6 +8,12 @@ import (
 	u "zerago/utils"
 )
 
+func GetVars(w http.ResponseWriter, r *http.Request) {
+	(w).Header().Set("Access-Control-Allow-Origin", "*")
+	resp := data.QueryVars()
+	u.Respond(w, resp)
+}
+
 func UpdatePassword(w http.ResponseWriter, r *http.Request) {
 	(w).Header().Set("Access-Control-Allow-Origin", "*")
 	item := &account.User{}
@@ -18,6 +24,33 @@ func UpdatePassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	resp := item.ChangePassword()
+	u.Respond(w, resp)
+}
+
+func UpdateServiceBay(w http.ResponseWriter, r *http.Request) {
+	(w).Header().Set("Access-Control-Allow-Origin", "*")
+	item := &data.ServiceBay{}
+	err := json.NewDecoder(r.Body).Decode(item) //decode the request body into struct and failed if any error occur
+	if err != nil {
+		panic(err)
+		u.Respond(w, u.Message(false, "Invalid request"))
+		return
+	}
+
+	resp := item.Update()
+	u.Respond(w, resp)
+}
+
+func NewServiceBay(w http.ResponseWriter, r *http.Request) {
+	(w).Header().Set("Access-Control-Allow-Origin", "*")
+	item := &data.ServiceBay{}
+	err := json.NewDecoder(r.Body).Decode(item) //decode the request body into struct and failed if any error occur
+	if err != nil {
+		panic(err)
+		u.Respond(w, u.Message(false, "Invalid request"))
+		return
+	}
+	resp := item.Insert()
 	u.Respond(w, resp)
 }
 

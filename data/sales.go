@@ -39,6 +39,8 @@ type Sale struct {
 	PaymentMethod    string          `json:"payment_method" pg:"payment_method"`
 	PaymentRef       string          `json:"payment_ref" pg:"payment_ref"`
 	DiscountItems    json.RawMessage `json:"discount_items" pg:"discount_items"`
+	ServiceBay       string          `json:"service_bay"`
+	ServicePersonnel int             `json:"service_personnel"`
 }
 
 type SalesItem struct {
@@ -48,6 +50,7 @@ type SalesItem struct {
 	Quantity     int     `json:"quantity" pg:"quantity"`
 	SalesID      int     `json:"sales_id" pg:"sales_id"`
 	SellingPrice float64 `json:"selling_price" pg:"selling_price"`
+	Cost         float64 `json:"cost" pg:"cost"`
 }
 type ItemData struct {
 	ID           int             `json:"id"`
@@ -134,6 +137,7 @@ func (sale *Sale) TrackItems() {
 		sales_item.Quantity = item.Quantity
 		sales_item.SalesID = sale.ID
 		sales_item.SellingPrice = item.SellingPrice
+		sales_item.Cost = item.Cost
 		errdb = DBM.Insert(&sales_item)
 		if errdb != nil {
 			panic(errdb)
